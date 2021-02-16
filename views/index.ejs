@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="style.css">
+   <title>Shopping list</title>
+</head>
+<body>
+
+   <h3 class="add">Add Item</h3>
+   <form action="/" method="POST">
+      <button type="submit">Submit</button>
+
+      <div class="container" id="0">
+         <h2>Item</h2> <input name="item">
+         <h2>Quantity</h2> <input name = "quantity">
+         <h3 class="remove" number="0">Remove</h3>
+      </div>
+
+   </form>
+
+      <h3>Current list: </h3>
+      <div>
+         <%list.forEach(product => {%>
+         <%= product.item %> : <%= product.quantity %> <br> 
+         <%}) %>
+      </div>
+
+      <h2>Your lists(collections)</h2>
+      <div>
+         <%collections.forEach(collection => {%>
+         <h4 class="collections"><%= collection%></h4>
+         <%}) %>
+
+       
+      </div>
+      
+      
+      
+</body>
+<script src="main.js" type="module"></script>
+</html>
