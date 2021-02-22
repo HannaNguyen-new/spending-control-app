@@ -4,11 +4,13 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose"); */
 import express from "express";
 import mongoose from "mongoose";
+import {router} from "./docs.js";
 export{getDocs}
 
 const app = express();
 app.use(express.static("public"))
 app.set("view engine", "ejs")
+app.use("/getDocs",router)
 
 // bodyParser is included in express version 4 and above so there is no need to install it separately
 app.use(express.json())
@@ -31,6 +33,7 @@ function getCollectionNames(){
 }
 
 function getDocs(modelName){
+   console.log(typeof modelName)
    return modelName.find()
    .then(docs => docs)
    .catch(err => console.log(err))

@@ -44,11 +44,11 @@ function makeRequest(modelName){
    const xhttp = new XMLHttpRequest();
    xhttp.onreadystatechange = function(){
       if(this.readyState == 4 && this.status == 200){
-        
+        console.log(xhttp.response)
         
       }
    };
-   xhttp.open("GET","docs.js",true);
+   xhttp.open("GET","http://localhost:3000/getDocs?modelName="+modelName,true);
    xhttp.send();
 }
 collections.forEach(collection => {
