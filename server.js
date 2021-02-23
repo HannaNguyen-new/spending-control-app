@@ -26,6 +26,7 @@ const itemSchema = new mongoose.Schema({
 
 const List1 = mongoose.model("List1",itemSchema);
 
+
 function getCollectionNames(){
    return mongoose.connection.db.listCollections().toArray() 
    .then(collectionArr => collectionArr.map(collection => collection.name))
@@ -52,24 +53,20 @@ Promise.all([docs,dbcollections])
 
 
 app.post("/", function(req,res){
-   const itemName = req.body.item;
-   const quantityValue = req.body.quantity;
+   const itemName = allToLowercase(req.body.item);
+   const quantityValue = allToLowercase(req.body.quantity);
    
    if(itemName instanceof Array){
-
-      for(let i = 0; i < itemName.length; i++){
-         const query = {item: itemName[i].toLowerCase()};
-         const update = {item: itemName[i].toLowerCase(),quantity: quantityValue[i]};
-         List1.updateOne(query,update,{upsert:true},function(err){
-            if(err){
-               console.log(err)
-            }else{
-               console.log("successfully update many")
-            }
+      itemName.forEach(function update(){
+         const query = {item: itemName};
+         const update = {quantity: quantityValue};
+         List1.updateOne(query, update, {upsert: true}, function(err){
+            err? console.log(err) : console.log("successfuly update many")
          })
-      }
+      
+      })
    }else{
-      List1.updateOne({item: itemName.toLowerCase()},{quantity: quantityValue},{upsert:true},function(err){
+      List1.updateOne({item: itemName},{quantity: quantityValue},{upsert:true},function(err){
          if(err){
             console.log(err)
          }else{
@@ -82,7 +79,13 @@ app.post("/", function(req,res){
  
 })
 
-
+function allToLowercase(input){
+   if(input instanceof Array){
+      return input.map(el => el.toLowerCase() )
+   }else{
+      return input.toLowerCase()
+   }
+}
 
 app.listen(process.env.PORT || 3000,function(){
    console.log("Server started on port 3000")
