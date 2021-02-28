@@ -14,8 +14,14 @@ app.set("view engine", "ejs")
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect("mongodb://localhost:27017/shopDB",{useNewUrlParser:true,useUnifiedTopology: true});
-
+// for local env const url = "mongodb://localhost:27017/shopDB"
+//the below url is to connect to mongodb atlas
+//const url = "mongodb+srv://NGUYEN_boss:q3bzOXv7VLtPAG3i@cluster0.jpxwg.mongodb.net/shopDB?retryWrites=true&w=majority"
+//Since we have set Mongodb atlas cluster to config var --> it is exposed to the application's code as environment variable 
+const url = process.env.MONGODB_URI;
+mongoose.connect(url,{useNewUrlParser:true,useUnifiedTopology: true})
+.then(success => console.log("Connected to database"))
+.catch(err => console.log(err))
 //define functions, variables, db schema etc
 const itemSchema = new mongoose.Schema({
    item: String,
