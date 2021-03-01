@@ -23,7 +23,7 @@
       <h3>Current list: </h3>
       <div>
          <%list.forEach(product => {%>
-         <%= product.item %> : <%= product.quantity %> <br> 
+        <span class="savedItem"><%= product.item %></span> <span> : <%= product.quantity %> </span><br>
          <%}) %>
       </div>
 
