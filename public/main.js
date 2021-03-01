@@ -70,7 +70,8 @@ const savedItem = document.querySelectorAll(".savedItem");
 function deleteRequest(itemName){
    let method = "DELETE";
    let url = "http://localhost:3000/delete?itemName=" + itemName;
-   httpRequest(method,url)
+   httpRequest(method,url);
+   window.location.href = "http://localhost:3000"
 }
 
 savedItem.forEach(item => {

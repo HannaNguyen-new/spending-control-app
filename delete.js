@@ -7,11 +7,8 @@ router.use(express.urlencoded({ extended: true }));
 
 router.delete("/", function(req, res, next){
 const query = {"item" : req.query.itemName};
-removeFromDB(query);
-next();
-res.redirect("/")
+removeFromDB(query)
 })
-
 
 function removeFromDB(param){
     List1.deleteOne(param,function(err){

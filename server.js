@@ -5,7 +5,7 @@ const mongoose = require("mongoose"); */
 import express from "express";
 import mongoose from "mongoose";
 import {deleteRouter} from "./delete.js";
-
+export{List1}
 const app = express();
 app.use(express.static("public"));
 app.set("view engine", "ejs");
@@ -32,7 +32,7 @@ const itemSchema = new mongoose.Schema({
    quantity: Number
 })
 
-export const List1 = mongoose.model("List1",itemSchema);
+const List1 = mongoose.model("List1",itemSchema);
 
 
 function getCollectionNames(){
@@ -79,7 +79,7 @@ app.post("/", function(req,res){
    const itemName = allToLowercase(req.body.item);
    const quantityValue = req.body.quantity;
   
-   
+   console.log(itemName, quantityValue)
    if(itemName instanceof Array){
       for(let i=0; i<itemName.length; i++){
          update(itemName[i], quantityValue[i])
