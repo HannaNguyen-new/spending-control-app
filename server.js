@@ -4,11 +4,12 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose"); */
 import express from "express";
 import mongoose from "mongoose";
-export{getDocs}
+
 
 const app = express();
 app.use(express.static("public"))
 app.set("view engine", "ejs")
+
 
 // bodyParser is included in express version 4 and above so there is no need to install it separately
 app.use(express.json())
@@ -31,6 +32,7 @@ const itemSchema = new mongoose.Schema({
 
 const List1 = mongoose.model("List1",itemSchema);
 
+
 function getCollectionNames(){
    return mongoose.connection.db.listCollections().toArray() 
    .then(collectionArr => collectionArr.map(collection => collection.name))
@@ -41,6 +43,22 @@ function getDocs(modelName){
    return modelName.find()
    .then(docs => docs)
    .catch(err => console.log(err))
+}
+
+function allToLowercase(input){
+   if(input instanceof Array){
+      return input.map(el => el.toLowerCase() )
+   }else{
+      return input.toLowerCase()
+   }
+}
+
+function update(param1, param2){
+   const query = {item: param1};
+   const update = {quantity: param2};
+   List1.updateOne(query, update, {upsert: true}, function(err){
+      err? console.log(err) : console.log("successfuly update")
+   })
 }
 
 // functions in action
@@ -56,37 +74,18 @@ Promise.all([docs,dbcollections])
 
 
 app.post("/", function(req,res){
-   const itemName = req.body.item;
-   const quantityValue = req.body.quantity;
+   const itemName = allToLowercase(req.body.item);
+   const quantityValue = allToLowercase(req.body.quantity);
    
    if(itemName instanceof Array){
-
-      for(let i = 0; i < itemName.length; i++){
-         const query = {item: itemName[i].toLowerCase()};
-         const update = {item: itemName[i].toLowerCase(),quantity: quantityValue[i]};
-         List1.updateOne(query,update,{upsert:true},function(err){
-            if(err){
-               console.log(err)
-            }else{
-               console.log("successfully update many")
-            }
-         })
-      }
+      itemName.forEach(update(itemName, quantityValue))
    }else{
-      List1.updateOne({item: itemName.toLowerCase()},{quantity: quantityValue},{upsert:true},function(err){
-         if(err){
-            console.log(err)
-         }else{
-            console.log("successfully update one")
-         }
-      })
+      update(itemName,quantityValue)
    }
   
    res.redirect("/");
  
 })
-
-
 
 app.listen(process.env.PORT || 3000,function(){
    console.log("Server started on port 3000")
