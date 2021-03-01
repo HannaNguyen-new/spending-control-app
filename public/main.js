@@ -39,6 +39,7 @@ add.addEventListener("click",function(){
    createItem();
 })
 
+/* HTTP request to display items of different lists*/
 const collections = document.querySelectorAll(".collections");
 function makeRequest(modelName){
    const xhttp = new XMLHttpRequest();
@@ -57,3 +58,5 @@ collections.forEach(collection => {
       makeRequest(clickedModelName)
    })
 })
+
+/* HTTP request to delete items */
