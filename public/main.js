@@ -39,24 +39,43 @@ add.addEventListener("click",function(){
    createItem();
 })
 
-/* HTTP request to display items of different lists*/
-const collections = document.querySelectorAll(".collections");
-function makeRequest(modelName){
+//HTTP request
+function httpRequest(method,url){
    const xhttp = new XMLHttpRequest();
    xhttp.onreadystatechange = function(){
       if(this.readyState == 4 && this.status == 200){
-        console.log(xhttp.response)
-        
+         console.log(xhttp.response)
       }
    };
-   xhttp.open("GET","http://localhost:3000/getDocs?modelName="+modelName,true);
+   xhttp.open(method,url,true);
    xhttp.send();
+}
+
+/* HTTP request to display items of different lists*/
+const collections = document.querySelectorAll(".collections");
+function displayRequest(modelName){
+   let method = "GET";
+   let url = "http://localhost:3000/getDocs?modelName="+modelName;
+   httpRequest(method,url)
 }
 collections.forEach(collection => {
    collection.addEventListener("click",function(){
       const clickedModelName = collection.innerHTML;
-      makeRequest(clickedModelName)
+     displayRequest(clickedModelName)
    })
 })
 
 /* HTTP request to delete items */
+const savedItem = document.querySelectorAll(".savedItem");
+function deleteRequest(itemName){
+   let method = "DELETE";
+   let url = "http://localhost:3000/delete?itemName=" + itemName;
+   httpRequest(method,url)
+}
+
+savedItem.forEach(item => {
+   item.addEventListener("click",function(){
+      const clickedItemName = item.innerHTML;
+      deleteRequest(clickedItemName)
+   })
+})

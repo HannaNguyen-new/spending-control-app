@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose"); */
 import express from "express";
 import mongoose from "mongoose";
-import deleteRouter from "delete";
+import {deleteRouter} from "./delete.js";
 
 const app = express();
 app.use(express.static("public"));
@@ -16,11 +16,12 @@ app.use("/delete", deleteRouter);
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
-// for local env const url = "mongodb://localhost:27017/shopDB"
+// for local env
+ const url = "mongodb://localhost:27017/shopDB"
 //the below url is to connect to mongodb atlas
 //const url = "mongodb+srv://NGUYEN_boss:q3bzOXv7VLtPAG3i@cluster0.jpxwg.mongodb.net/shopDB?retryWrites=true&w=majority"
 //Since we have set Mongodb atlas cluster to config var --> it is exposed to the application's code as environment variable 
-const  url = process.env.MONGODB_URI;
+//const  url = process.env.MONGODB_URI;
 
 mongoose.connect(url,{useNewUrlParser:true,useUnifiedTopology: true})
 .then(success => console.log("Connected to database"))
@@ -31,7 +32,7 @@ const itemSchema = new mongoose.Schema({
    quantity: Number
 })
 
-const List1 = mongoose.model("List1",itemSchema);
+export const List1 = mongoose.model("List1",itemSchema);
 
 
 function getCollectionNames(){
@@ -76,10 +77,14 @@ Promise.all([docs,dbcollections])
 
 app.post("/", function(req,res){
    const itemName = allToLowercase(req.body.item);
-   const quantityValue = allToLowercase(req.body.quantity);
+   const quantityValue = req.body.quantity;
+  
    
    if(itemName instanceof Array){
-      itemName.forEach(update(itemName, quantityValue))
+      for(let i=0; i<itemName.length; i++){
+         update(itemName[i], quantityValue[i])
+      }
+     
    }else{
       update(itemName,quantityValue)
    }
@@ -87,6 +92,7 @@ app.post("/", function(req,res){
    res.redirect("/");
  
 })
+
 
 app.listen(process.env.PORT || 3000,function(){
    console.log("Server started on port 3000")
