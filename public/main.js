@@ -69,9 +69,9 @@ collections.forEach(collection => {
 const trashBin = document.querySelectorAll(".trashBin");
 function deleteRequest(itemName){
    let method = "DELETE";
-   let url = "http://localhost:3000/delete?itemName=" + itemName;
+   let url = "/delete?itemName=" + itemName;
    httpRequest(method,url);
-   window.location.href = "http://localhost:3000"
+   window.location.href = "/"
 }
 
 trashBin.forEach(bin => {
