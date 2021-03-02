@@ -10,8 +10,8 @@ function elementFactory(type,properties){
 
 class ShoppingItem {
    constructor(){
-      this.item = `<h2>Item</h2> <input name="item">`,
-      this.quantity = `<h2>Quantity</h2> <input name = "quantity">`
+      this.item = `<h2 class="item">Item</h2> <input name="item">`,
+      this.quantity = `<h2 class="quantity">Quantity</h2> <input name = "quantity">`
    };
 }
 var count = 1;
@@ -66,7 +66,7 @@ collections.forEach(collection => {
 })
 
 /* HTTP request to delete items */
-const savedItem = document.querySelectorAll(".savedItem");
+const trashBin = document.querySelectorAll(".trashBin");
 function deleteRequest(itemName){
    let method = "DELETE";
    let url = "http://localhost:3000/delete?itemName=" + itemName;
@@ -74,9 +74,10 @@ function deleteRequest(itemName){
    window.location.href = "http://localhost:3000"
 }
 
-savedItem.forEach(item => {
-   item.addEventListener("click",function(){
-      const clickedItemName = item.innerHTML;
-      deleteRequest(clickedItemName)
+trashBin.forEach(bin => {
+   bin.addEventListener("click",function(){
+      bin.parentNode.setAttribute("class","delete");
+      const deleteItem = document.querySelector(".delete").children[0];
+      deleteRequest(deleteItem.innerHTML)
    })
 })
