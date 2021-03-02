@@ -10,8 +10,8 @@ function elementFactory(type,properties){
 
 class ShoppingItem {
    constructor(){
-      this.item = `<h2>Item</h2> <input name="item">`,
-      this.quantity = `<h2>Quantity</h2> <input name = "quantity">`
+      this.item = `<h2 class="item">Item</h2> <input name="item">`,
+      this.quantity = `<h2 class="quantity">Quantity</h2> <input name = "quantity">`
    };
 }
 var count = 1;
@@ -39,21 +39,45 @@ add.addEventListener("click",function(){
    createItem();
 })
 
-const collections = document.querySelectorAll(".collections");
-function makeRequest(modelName){
+//HTTP request
+function httpRequest(method,url){
    const xhttp = new XMLHttpRequest();
    xhttp.onreadystatechange = function(){
       if(this.readyState == 4 && this.status == 200){
-        
-        
+         console.log(xhttp.response)
       }
    };
-   xhttp.open("GET","docs.js",true);
+   xhttp.open(method,url,true);
    xhttp.send();
+}
+
+/* HTTP request to display items of different lists*/
+const collections = document.querySelectorAll(".collections");
+function displayRequest(modelName){
+   let method = "GET";
+   let url = "http://localhost:3000/getDocs?modelName="+modelName;
+   httpRequest(method,url)
 }
 collections.forEach(collection => {
    collection.addEventListener("click",function(){
       const clickedModelName = collection.innerHTML;
-      makeRequest(clickedModelName)
+     displayRequest(clickedModelName)
+   })
+})
+
+/* HTTP request to delete items */
+const trashBin = document.querySelectorAll(".trashBin");
+function deleteRequest(itemName){
+   let method = "DELETE";
+   let url = "http://localhost:3000/delete?itemName=" + itemName;
+   httpRequest(method,url);
+   window.location.href = "http://localhost:3000"
+}
+
+trashBin.forEach(bin => {
+   bin.addEventListener("click",function(){
+      bin.parentNode.setAttribute("class","delete");
+      const deleteItem = document.querySelector(".delete").children[0];
+      deleteRequest(deleteItem.innerHTML)
    })
 })

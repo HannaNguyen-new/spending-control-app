@@ -4,21 +4,25 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose"); */
 import express from "express";
 import mongoose from "mongoose";
-export{getDocs}
-
+import {deleteRouter} from "./delete.js";
+export{List1}
 const app = express();
-app.use(express.static("public"))
-app.set("view engine", "ejs")
+app.use(express.static("public"));
+app.set("view engine", "ejs");
+app.use("/delete", deleteRouter);
+
 
 // bodyParser is included in express version 4 and above so there is no need to install it separately
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
-// for local env const url = "mongodb://localhost:27017/shopDB"
+// for local env
+ const url = "mongodb://localhost:27017/shopDB"
 //the below url is to connect to mongodb atlas
 //const url = "mongodb+srv://NGUYEN_boss:q3bzOXv7VLtPAG3i@cluster0.jpxwg.mongodb.net/shopDB?retryWrites=true&w=majority"
 //Since we have set Mongodb atlas cluster to config var --> it is exposed to the application's code as environment variable 
-const url = process.env.MONGODB_URI;
+//const  url = process.env.MONGODB_URI;
+
 mongoose.connect(url,{useNewUrlParser:true,useUnifiedTopology: true})
 .then(success => console.log("Connected to database"))
 .catch(err => console.log(err))
@@ -30,6 +34,7 @@ const itemSchema = new mongoose.Schema({
 
 const List1 = mongoose.model("List1",itemSchema);
 
+
 function getCollectionNames(){
    return mongoose.connection.db.listCollections().toArray() 
    .then(collectionArr => collectionArr.map(collection => collection.name))
@@ -40,6 +45,22 @@ function getDocs(modelName){
    return modelName.find()
    .then(docs => docs)
    .catch(err => console.log(err))
+}
+
+function allToLowercase(input){
+   if(input instanceof Array){
+      return input.map(el => el.toLowerCase() )
+   }else{
+      return input.toLowerCase()
+   }
+}
+
+function update(param1, param2){
+   const query = {item: param1};
+   const update = {quantity: param2};
+   List1.updateOne(query, update, {upsert: true}, function(err){
+      err? console.log(err) : console.log("successfuly update")
+   })
 }
 
 // functions in action
@@ -55,36 +76,22 @@ Promise.all([docs,dbcollections])
 
 
 app.post("/", function(req,res){
-   const itemName = req.body.item;
+   const itemName = allToLowercase(req.body.item);
    const quantityValue = req.body.quantity;
-   
+  
+   console.log(itemName, quantityValue)
    if(itemName instanceof Array){
-
-      for(let i = 0; i < itemName.length; i++){
-         const query = {item: itemName[i].toLowerCase()};
-         const update = {item: itemName[i].toLowerCase(),quantity: quantityValue[i]};
-         List1.updateOne(query,update,{upsert:true},function(err){
-            if(err){
-               console.log(err)
-            }else{
-               console.log("successfully update many")
-            }
-         })
+      for(let i=0; i<itemName.length; i++){
+         update(itemName[i], quantityValue[i])
       }
+     
    }else{
-      List1.updateOne({item: itemName.toLowerCase()},{quantity: quantityValue},{upsert:true},function(err){
-         if(err){
-            console.log(err)
-         }else{
-            console.log("successfully update one")
-         }
-      })
+      update(itemName,quantityValue)
    }
   
    res.redirect("/");
  
 })
-
 
 
 app.listen(process.env.PORT || 3000,function(){

@@ -13,19 +13,23 @@
       <button type="submit">Submit</button>
 
       <div class="container" id="0">
-         <h2>Item</h2> <input name="item">
-         <h2>Quantity</h2> <input name = "quantity">
+         <h2 class="item">Item</h2> <input name="item">
+         <h2 class="quantity">Quantity</h2> <input name = "quantity">
          <h3 class="remove" number="0">Remove</h3>
       </div>
 
    </form>
 
       <h3>Current list: </h3>
-      <div>
+     
          <%list.forEach(product => {%>
-         <%= product.item %> : <%= product.quantity %> <br> 
+        <div class="savedItem">    
+        <span><%= product.item %></span>
+        <span>: <%= product.quantity %></span>
+        <img class="trashBin" src="icons/trash-bin.svg" alt="trash bin">
+        </div>
          <%}) %>
-      </div>
+     
 
       <h2>Your lists(collections)</h2>
       <div>
