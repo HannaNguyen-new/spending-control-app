@@ -3,6 +3,9 @@
 body{
    margin:30px;
 }
+.add{
+   margin-right: 10px;
+}
 .add,
 .remove{
    display: inline-block;  
@@ -20,14 +23,16 @@ body{
 
 
 .item,
-.quantity{
+.quantity,
+.remove{
    display: inline-block;  
    margin: 0 10px;
 }
 
 .container{
-   width:50%;
+   width:40%;
    margin: 10px 0;
+   padding:5px;
    background-color: rgb(206, 240, 208);
 }
 .savedItem{
@@ -37,4 +42,59 @@ img{
    width: 30px;
 }
 
+@media only screen and (max-width:280px) {
+   body{
+      font-size: 12px;
+   }
+   .container{
+      width: 100%;
+   }
+   .item,
+   .quantity,
+   .remove{
+   display: inline-block;  
+   margin: 5px 0;
+}
+   input{
+      width:20%;
+   }
 
+}
+
+@media only screen and (min-width:280px) and (max-width:480px){
+   body{
+      font-size: 12px;
+   }
+   .container{
+      width: 60%;
+   }
+   .item,
+   .quantity,
+   .remove{
+   display: inline-block;  
+   margin: 5px 0;
+}
+   input{
+      width:20%;
+   }
+
+}
+
+@media only screen and (min-width:480px) and (max-width:1600px) {
+   body{
+      font-size: 12px;
+   }
+   .container{
+      width: 50%;
+   }
+   .item,
+   .quantity,
+   .remove{
+   display: inline-block;  
+   margin: 5px 0;
+}
+   input{
+      width:20%;
+   }
+
+}
