@@ -10,8 +10,8 @@ function elementFactory(type,properties){
 
 class ShoppingItem {
    constructor(){
-      this.item = `<h2 class="item">Item</h2> <input name="item">`,
-      this.quantity = `<h2 class="quantity">Quantity</h2> <input name = "quantity">`
+      this.item = `<h3 class="item">Item</h3> <input name="item">`,
+      this.quantity = `<h3 class="quantity">Quantity</h3> <input name = "quantity">`
    };
 }
 var count = 1;
