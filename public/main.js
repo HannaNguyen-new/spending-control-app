@@ -39,6 +39,22 @@ add.addEventListener("click",function(){
    createItem();
 })
 
+const checkMarks = document.querySelectorAll(".checkMark");
+checkMarks.forEach(checkMark => {
+   checkMark.addEventListener("click",function(){ 
+      toggle(checkMark);
+   })
+})
+function toggle(node){ 
+  const checkedItem = node.parentNode;
+  checkedItem.toggleAttribute("checked");  
+  if(checkedItem.hasAttribute("checked")){
+   checkedItem.style.textDecoration = "line-through"
+} else{
+   checkedItem.style.textDecoration = "none"
+}
+}
+
 //HTTP request
 function httpRequest(method,url){
    const xhttp = new XMLHttpRequest();
