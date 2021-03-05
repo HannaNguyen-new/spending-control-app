@@ -38,8 +38,17 @@ body{
 .savedItem{
    font-size:18px;
 }
-img{
+.trashBin{
    width: 30px;
+   margin-bottom: -3px;
+}
+.checkMark{
+   margin: 0 5px 0 20px;
+   width: 25px;
+}
+.trashBin:hover,
+.checkMark:hover{
+   cursor: pointer;
 }
 
 @media only screen and (max-width:280px) {
