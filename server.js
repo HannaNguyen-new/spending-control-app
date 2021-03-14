@@ -18,7 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // for local env
 // const url = "mongodb://localhost:27017/shopDB"
-//the below url is to connect to mongodb atlas
 //Since we have set Mongodb atlas cluster to config var --> it is exposed to the application's code as environment variable 
 const  url = process.env.MONGODB_URI;
 
